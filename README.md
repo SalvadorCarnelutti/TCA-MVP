@@ -29,12 +29,20 @@ Project is created with:
 * UIKit
     
 ## Setup
-Paste **SwiftUI Templates** folder into the following directory:
+Paste **SwiftUI Templates** entire folder into the following directory:
 ```
 /Applications/Xcode.app/Contents/Developer/Library/Xcode/Templates
 ```
 
-Enjoy some quick "plug and play" templates for this "library".
+Enjoy some quick "plug and play" templates for this "library" under the **SwiftUI** section whenever you try creating a new file. They have some commented code on them to let any newcoming users know where :
+
+* **REDUX.xctemplate**: For when a feature is not expected to do neither navigation or interact with external systems.
+* **REDUX+E.xctemplate**: For when a feature is expected to do some kind of interaction with external systems.
+* **REDUX+N.xctemplate**: For when a feature is expected to do some kind of navigation work.
+* **REDUX+EN.xctemplate**: For when you need to handle the two previous template conditions.
+* **Dependency.xctemplate**: For any screen that would make use out of it, it is already included for **REDUX+E.xctemplate** and **REDUX+EN.xctemplate** but dependency injection can be useful for any other number of cases.
+
+Note: You may have scroll all the way to the bottom to see the **SwiftUI** templates when in the new file screen.
 
 ## Improvements
 This repo could be wrapped and turned into an actual library for people to download and access more easily.
