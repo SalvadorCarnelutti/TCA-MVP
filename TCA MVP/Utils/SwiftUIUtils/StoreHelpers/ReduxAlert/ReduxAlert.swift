@@ -8,16 +8,6 @@
 import SwiftUI
 
 /**
- Represents underlying information to display an `Alert`:
- - `error` for standardized error handling.
- - `custom` for any other `Alert` setup requirement.
- */
-enum ReduxAlert: Equatable {
-    case error
-    case custom(ReduxAlertConfig)
-}
-
-/**
  Either or both `primaryAction` and `secondaryAction` are optionals since `SwiftUI` automatically dismisses alerts when any alert button is tapped.
  When configured, in addition to dismissing the alert, they can perform additional operations. However, since we are using a `Redux` architecture, those operations must be encapsulated within `Action`s.
  Conforms to `Equatable` since `onReduxAlertChange` implementation depends on it.
@@ -25,8 +15,8 @@ enum ReduxAlert: Equatable {
 struct ReduxAlertConfig: Equatable {
     let title: String
     let message: String?
-    var primaryActionButton: AlertButton? = nil
-    var secondaryActionButton: AlertButton? = nil
+    var primaryActionButton: AlertButton?
+    var secondaryActionButton: AlertButton?
     
     var alert: Alert {
         let defaultPrimaryAction = primaryActionButton?.alertButton ?? .default(Text("OK"))

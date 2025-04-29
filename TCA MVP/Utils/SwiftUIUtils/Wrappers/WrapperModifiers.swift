@@ -8,7 +8,6 @@
 import SwiftUI
 
 /// `WrapperModifiers`: Intended for `modifier`s that wrap `Content` around a new `View`.
-
 struct SpinnerOverlayModifier: ViewModifier {
     let isLoading: Bool
 

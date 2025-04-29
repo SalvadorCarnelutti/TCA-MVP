@@ -47,8 +47,6 @@ struct Effect<A> { /// `A: Action type`
 }
 
 /** None of these modes guarantee that the effects will complete in the same order they were introduced.
- - Associated values represent the default resulting `Action` to handle `Effects`' thrown errors.
- -  `Int` represents the count of unsent actions to the `Store` because an error was thrown.
  
  They describe how to handle `Effect`s when any of their `execute()` throws.
  - Do we allow all of them to update `State` while ignoring any thrown errors? (`none`)
@@ -56,9 +54,13 @@ struct Effect<A> { /// `A: Action type`
  - Do we stop at the first thrown error (handling it), but allow effects completed by then to update `State`? (`partial`)
  - Do we even allow `State` updates at all when there's any error at any point? (`absolute`)
  */
+
+/// The default resulting `Action` to handle `Effects`' thrown errors. `Int` represents the count of unsent actions to the `Store` because an error was thrown.
+typealias ErrorActionHandler<A> = (Error, Int) -> A
+
 enum ThrowMode<A> {
     case none /// Thrown errors aren't handled. Useful when performing background work that shouldn't disrupt user experience when failing.
-    case lenient((Error) -> A) /// Let all effects complete, even if they throw errors. This could be considered the "default" in `ThrowMode`.
-    case partial((Error, Int) -> A) /// At first thrown error, stop remaning running effects (if any). However, effects that have already completed will not be undone, and their results will be added to current `State`.
-    case absolute((Error, Int) -> A) /// Run actions only if none of the effects throw an error.
+    case lenient(ErrorActionHandler<A>) /// Let all effects complete, even if they throw errors. This could be considered the "default" in `ThrowMode`.
+    case partial(ErrorActionHandler<A>) /// At first thrown error, stop remaning running effects (if any). However, effects that have already completed will not be undone, and their results will be added to current `State`.
+    case absolute(ErrorActionHandler<A>) /// Run actions only if none of the effects throw an error.
 }

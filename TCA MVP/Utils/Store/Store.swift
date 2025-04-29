@@ -123,7 +123,7 @@ extension Store {
         }
     }
 
-    private func handleEffectsWithTaskGroupLenient(_ effects: [Effect<Reducer.FeatureAction>], errorActionHandler: (Error) -> Reducer.FeatureAction) async {
+    private func handleEffectsWithTaskGroupLenient(_ effects: [Effect<Reducer.FeatureAction>], errorActionHandler: ErrorActionHandler<Reducer.FeatureAction>) async {
         /// If any task in the group throws an error, the group will still follow through with remaining tasks. This means multiple errors can be thrown during execution.
         await withTaskGroup(of: Result<Reducer.FeatureAction, Error>.self) { group in
             for effect in effects {
@@ -143,14 +143,14 @@ extension Store {
                 case .success(let newAction):
                     await MainActor.run { send(newAction) }
                 case .failure(let error):
-                    let errorAction = errorActionHandler(error)
+                    let errorAction = errorActionHandler(error, 1)
                     await MainActor.run { send(errorAction) }
                 }
             }
         }
     }
     
-    private func handleEffectsWithThrowingTaskGroupPartial(_ effects: [Effect<Reducer.FeatureAction>], errorActionHandler: (Error, Int) -> Reducer.FeatureAction) async {
+    private func handleEffectsWithThrowingTaskGroupPartial(_ effects: [Effect<Reducer.FeatureAction>], errorActionHandler: ErrorActionHandler<Reducer.FeatureAction>) async {
         /// If any task in the group throws an error, the group immediately cancels remaining tasks and propagates the error. This means that a single error is ever thrown (if any at all).
         /// However, tasks that have already completed will not be undone, and their results might have already been processed (`Store` will have made partial `State` updates).
         
@@ -174,7 +174,7 @@ extension Store {
         }
     }
     
-    private func handleEffectsWithThrowingTaskGroupAbsolute(_ effects: [Effect<Reducer.FeatureAction>], errorActionHandler: (Error, Int) -> Reducer.FeatureAction) async {
+    private func handleEffectsWithThrowingTaskGroupAbsolute(_ effects: [Effect<Reducer.FeatureAction>], errorActionHandler: ErrorActionHandler<Reducer.FeatureAction>) async {
         /// If any task in the group throws an error, the group immediately cancels remaining tasks and propagates the error. This means that a single error is ever thrown (if any at all).
         do {
             let successfulNewActions = try await withThrowingTaskGroup(of: Reducer.FeatureAction.self) { group -> [Reducer.FeatureAction] in

@@ -8,7 +8,6 @@
 import SwiftUI
 
 /// `WrapperViews`: Intended for `UIKit` views that wrap `SwiftUI`'s `View`s. A bridging of sorts between the `SwiftUI` realm and the `UIKit` realm.
-
 final class HostingTableViewCell<Content: View>: UITableViewCell {
     private var uiHostingController: UIHostingController<Content>?
 
