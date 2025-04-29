@@ -16,20 +16,10 @@ struct ___VARIABLE_moduleName:identifier___ {
             // case yourDestinationAction
             case destinationCompleted
         }
-        
-        enum AlertAction {
-            case errorResponse(Error, Int)
-            case alertCompleted
-        }
     }
     
     enum Destination: Equatable {
         // case yourDestination
-    }
-
-    enum AlertDestination: Equatable {
-        case alertPhoneCall(String)
-        case login
     }
 }
 
@@ -67,7 +57,6 @@ struct ___VARIABLE_moduleName:identifier___Reducer: ReducerProtocol {
         return ReducerResult(newState: newState, effectGroup: effectGroup)
     }
     
-    private func onErrorAction(_ error: Error) -> ___VARIABLE_moduleName:identifier___.Action { .alertAction(.errorResponse(error, 1)) }
     private func onErrorAction(_ error: Error, _ unsentActionsCount: Int) -> ___VARIABLE_moduleName:identifier___.Action { .alertAction(.errorResponse(error, unsentActionsCount)) }
 }
 
