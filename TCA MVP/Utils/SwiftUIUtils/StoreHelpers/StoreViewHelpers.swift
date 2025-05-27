@@ -28,6 +28,7 @@ extension View {
 }
 
 struct OnDestinationCompletedModifier: ViewModifier {
+    /// `hasAppeared` tracking to only apply when `View` re-appears.
     @State private var hasAppeared = false
     var action: () -> Void
     
